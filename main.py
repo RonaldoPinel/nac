@@ -19,6 +19,8 @@ def play_current_track():
 # Função para avançar para a próxima música
 def next_track():
     st.session_state.current_track_index = (st.session_state.current_track_index + 1) % len(tracks)
+    st.experimental_set_query_params(index=st.session_state.current_track_index)
+    st.experimental_rerun()
 
 # Exibir o nome da música atual
 current_track_name = tracks[st.session_state.current_track_index]
@@ -30,4 +32,3 @@ play_current_track()
 # Adicionar o botão para a próxima música
 if st.button("Próxima Música"):
     next_track()
-    st.experimental_rerun()

@@ -5,17 +5,33 @@ tracks = [
     "4 - Amigos Pela Fé_Mais que Amigos.mp3",
     "9 - Majestosa Eucaristia _ Invade Minh'alma _ Maria E O Anjo _ Maria da Eucaristia.mp3",
     "12 - Sou Teu Anjo.mp3"
-    
 ]
 
-# Adicionar os elementos de áudio como HTML
-audio_elements_html = ''.join([f"<audio id='audio_{i}' src='{track}'></audio>" for i, track in enumerate(tracks)])
-st.markdown(f"<div id='audio-container'>{audio_elements_html}</div>", unsafe_allow_html=True)
+# Variável para armazenar o índice da música atual
+if 'current_track_index' not in st.session_state:
+    st.session_state.current_track_index = 0
 
-# Exibir o player do primeiro áudio
-st.audio(tracks[0], format="audio/mpeg", start_time=0, loop=False)
+# Função para tocar a música atual
+def play_current_track():
+    track = tracks[st.session_state.current_track_index]
+    st.audio(track, format="audio/mpeg", start_time=0, loop=False)
 
-# Código JavaScript para tocar as músicas em sequência
+# Função para avançar para a próxima música
+def next_track():
+    st.session_state.current_track_index = (st.session_state.current_track_index + 1) % len(tracks)
+    st.experimental_rerun()
+
+# Exibir o nome da música atual
+current_track_name = tracks[st.session_state.current_track_index]
+st.markdown(f"### {current_track_name}")
+
+# Exibir o player da música atual
+play_current_track()
+
+# Adicionar o botão para a próxima música
+st.button("Próxima Música", on_click=next_track)
+
+# Código JavaScript para tocar as músicas em sequência automaticamente
 st.markdown("""
 <script>
     const audioElements = Array.from(document.querySelectorAll('audio'));
@@ -35,5 +51,3 @@ st.markdown("""
     firstAudio.addEventListener('ended', playNext);
 </script>
 """, unsafe_allow_html=True)
-
-st.write("As músicas irão tocar em sequência.")

@@ -1,3 +1,3 @@
-streamlit as st
+streamlit 
 cx_Oracle
-pandas as pd
+pandas 

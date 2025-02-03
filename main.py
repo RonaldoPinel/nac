@@ -7,7 +7,7 @@ tracks = [
     "12 - Sou Teu Anjo.mp3"
 ]
 
-# Variável para armazenar o índice da música atual
+# Inicializar o índice da música atual
 if 'current_track_index' not in st.session_state:
     st.session_state.current_track_index = 0
 
@@ -19,7 +19,6 @@ def play_current_track():
 # Função para avançar para a próxima música
 def next_track():
     st.session_state.current_track_index = (st.session_state.current_track_index + 1) % len(tracks)
-    st.experimental_rerun()
 
 # Exibir o nome da música atual
 current_track_name = tracks[st.session_state.current_track_index]
@@ -29,25 +28,6 @@ st.markdown(f"### {current_track_name}")
 play_current_track()
 
 # Adicionar o botão para a próxima música
-st.button("Próxima Música", on_click=next_track)
-
-# Código JavaScript para tocar as músicas em sequência automaticamente
-st.markdown("""
-<script>
-    const audioElements = Array.from(document.querySelectorAll('audio'));
-    let currentIndex = 0;
-
-    function playNext() {
-        if (currentIndex < audioElements.length) {
-            audioElements[currentIndex].play();
-            audioElements[currentIndex].addEventListener('ended', () => {
-                currentIndex++;
-                playNext();
-            });
-        }
-    }
-
-    const firstAudio = audioElements[currentIndex];
-    firstAudio.addEventListener('ended', playNext);
-</script>
-""", unsafe_allow_html=True)
+if st.button("Próxima Música"):
+    next_track()
+    st.experimental_rerun()

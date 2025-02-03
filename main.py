@@ -7,9 +7,13 @@ tracks = [
     "12 - Sou Teu Anjo.mp3"
 ]
 
+# Recuperar parâmetros de consulta da URL
+query_params = st.experimental_get_query_params()
+index = int(query_params.get("index", [0])[0])
+
 # Inicializar o índice da música atual
 if 'current_track_index' not in st.session_state:
-    st.session_state.current_track_index = 0
+    st.session_state.current_track_index = index
 
 # Função para tocar a música atual
 def play_current_track():
@@ -19,7 +23,7 @@ def play_current_track():
 # Função para avançar para a próxima música
 def next_track():
     st.session_state.current_track_index = (st.session_state.current_track_index + 1) % len(tracks)
-    st.query_params.update(index=st.session_state.current_track_index)
+    st.experimental_set_query_params(index=st.session_state.current_track_index)
 
 # Exibir o nome da música atual
 current_track_name = tracks[st.session_state.current_track_index]
